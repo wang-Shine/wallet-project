@@ -104,7 +104,7 @@ export default function Claim() {
                 </div>
             )}
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                <DialogContent className="sm:max-w-md">
+                <DialogContent>
                     <DialogHeader className="items-center text-center">
                         <DialogTitle className="text-lg">Claim Success</DialogTitle>
                         <DialogDescription>
