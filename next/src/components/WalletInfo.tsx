@@ -1,4 +1,5 @@
 import { useConnection, useBalance, useReadContract } from 'wagmi'
+import { formatEther } from "viem";
 import {
     Card,
     CardContent,
@@ -7,7 +8,7 @@ import {
 import { TOKEN_ADDRESS, TOKEN_ABI } from '@/config/contracts'
 
 export default function WalletInfo() {
-    const { address, connector } = useConnection()
+    const { address, connector, chain } = useConnection()
     const { data: ethBalance } = useBalance({ address })
 
     const { data: tokenBalance } = useReadContract({
@@ -15,6 +16,11 @@ export default function WalletInfo() {
         abi: TOKEN_ABI,
         functionName: 'balanceOf',
         args: address ? [address] : undefined
+    })
+    const { data: tokenSymbol } = useReadContract({
+        address: TOKEN_ADDRESS,
+        abi: TOKEN_ABI,
+        functionName: 'symbol'
     })
     return (
         <Card>
@@ -32,12 +38,12 @@ export default function WalletInfo() {
                     <p>{address}</p>
                 </div>
                 <div className='flex'>
-                    <span className='font-bold'>ETH Balance：</span>
-                    <p>{ethBalance?.value}</p>
+                    <span className='font-bold'>{chain?.name}ETH Balance：</span>
+                    <p>{ethBalance ? Number(formatEther(ethBalance.value)).toFixed(3) + 'ETH' : '0.0ETH'}</p>
                 </div>
                 <div className='flex'>
-                    <span className='font-bold'>Token Balance：</span>
-                    <p>{tokenBalance}</p>
+                    <span className='font-bold'>{tokenSymbol} Balance：</span>
+                    <p>{tokenBalance ? Number(formatEther(tokenBalance)).toFixed(3) + 'ETH' : '0.0ETH'}</p>
                 </div>
             </CardContent>
         </Card>

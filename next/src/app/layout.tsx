@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { headers } from 'next/headers'
 import ContextProvider from '@/context'
+import { Toaster } from '@/components/ui/sonner'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <ContextProvider cookies={cookies}>{children}</ContextProvider>
+        <Toaster />
       </body>
     </html>
   );

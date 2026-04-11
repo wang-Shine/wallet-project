@@ -14,5 +14,19 @@ export const TOKEN_ABI = [
     stateMutability: 'nonpayable',
     inputs: [],
     outputs: [],
+  },
+  {
+    name: 'symbol',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{name: '', type: 'string'}],
+  },
+  {
+    name: 'lastClaimTime',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{name: '', type: 'address'}],
+    outputs: [{name: '', type: 'uint256'}],
   }
 ] as const
