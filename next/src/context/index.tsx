@@ -8,10 +8,6 @@ import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
 
 const queryClient = new QueryClient()
 
-if(!projectId) {
-    throw new Error('projectId is not defined')
-}
-
 const metadata = {
     name: 'wallet-project',
     description: 'ERC20 Wallet',

@@ -7,14 +7,16 @@ import { useState, useEffect } from "react"
 import { TOKEN_ADDRESS, TOKEN_ABI } from '@/config/contracts'
 import DialogBody from '@/components/Dialog'
 import LoadingBody from '@/components/Loading'
+import { useTransactionStore } from '@/store/transactionStore'
 
 const INTERVAL = 5 * 60
 
 export default function Claim() {
     const [remaining, setRemaining] = useState(0)
     const [dialogOpen, setDialogOpen] = useState(false)
+    const setHistory = useTransactionStore(state => state.setHistory)
     
-    const { address } = useConnection()
+    const { address, chain } = useConnection()
     const writeContract = useWriteContract()
     const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
         hash: writeContract.data,
@@ -46,8 +48,20 @@ export default function Claim() {
 
     useEffect(() => {
         if (isSuccess) {
+            if(!writeContract.data || !address || !tokenSymbol || !chain) return
             setDialogOpen(true)
             refetch()
+            setHistory({
+                id: new Date().getTime().toString(),
+                type: 'claim',
+                status: 'success',
+                hash: writeContract.data,
+                from: address,
+                to: '',
+                amount: '100',
+                symbol: tokenSymbol,
+                network: chain.id
+            })
         }
     }, [isSuccess])
 
@@ -92,7 +106,7 @@ export default function Claim() {
                     {isLoading ? <Spinner data-icon="inline-start" /> : isCooldown ? `Wait ${minutes}:${String(seconds).padStart(2, '0')}` : 'Claim'}
                 </Button>
             </div>
-            <DialogBody tokenSymbol={tokenSymbol} address={address} amount="0" hash={writeContract.data} open={dialogOpen} onOpenChange={setDialogOpen} />
+            <DialogBody type="claim" tokenSymbol={tokenSymbol} address={address} hash={writeContract.data} open={dialogOpen} onOpenChange={setDialogOpen} />
         </>
     )
 }

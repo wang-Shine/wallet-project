@@ -9,7 +9,7 @@ import {
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { CopyIcon } from "lucide-react"
-export default function DialogBody({tokenSymbol, address, amount, hash, open, onOpenChange}: {tokenSymbol?: string, address?: string, amount?: string,hash?: string, open: boolean, onOpenChange: (open: boolean) => void}) {
+export default function DialogBody({type, tokenSymbol, address, amount, hash, open, onOpenChange}: {type: "claim"| "transfer", tokenSymbol?: string, address?: string, amount?: string,hash?: string, open: boolean, onOpenChange: (open: boolean) => void}) {
 
     const copyHandle = () => {
         if(hash) {
@@ -21,12 +21,12 @@ export default function DialogBody({tokenSymbol, address, amount, hash, open, on
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 {
-                    amount ? 
+                    type === 'transfer' ? 
                     (
                         <DialogHeader className="items-center text-center">
                             <DialogTitle className="text-lg">Transfer Success</DialogTitle>
                             <DialogDescription>
-                                Successfully claimed <span className="font-semibold text-foreground">{amount} {tokenSymbol}</span>
+                                Successfully transferred <span className="font-semibold text-foreground">{amount} {tokenSymbol}</span>
                             </DialogDescription>
                         </DialogHeader>
                     ) : (
